@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  db:
+    image: postgis/postgis:15-3.4
+    container_name: yoxi_postgis
+    environment:
+      POSTGRES_USER: yoxi_admin
+      POSTGRES_PASSWORD: yoxi_password
+      POSTGRES_DB: yoxi_citygrid
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgis_data:/var/lib/postgresql/data
+  api:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+volumes:
+  postgis_data:
